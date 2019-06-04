@@ -40,3 +40,48 @@ def printBackInformationAndSwitchColorNode(txt, G, v, color1, color2, info, city
 	writeInformation(txt, info, '', city)
 	wait(2)
 	changeColorNode(G, v, color2)
+	
+# Zaznacza punkt startowy związany z wierzchołkiem v grafu G.
+def markStartingPoint(G, v):
+	changeColorNode(G, v, 'r')
+	wait(1)
+	changeColorNode(G, v, 'g')
+	wait(2)
+
+# Zaznacza trasę pomiędzy miastami związanymi z wierzchołkami v i pre
+# grafu G. Wypisuje informację związaną z przemieszczeniem się między miastami.
+def markTrailBetweenCitiesAndPrintReport(txt, G, v, pre, city, pos):
+	changeColorAndPrintInformation(txt, G, v, pre, 'r', 'Wyruszamy do miasta', city, pos)
+	wait(2)
+	changeColorAndPrintInformation(txt, G, v, pre, 'g', 'Dotarliśmy do miasta', city, pos)
+	wait(1)
+
+# Zaznacza miasto związane z wierzchołkiem v grafu G.
+# Wypisuje informację info związaną z miastem city.
+def markNodeAndPrintBackInformation(txt, G, v, info, city):
+	printBackInformationAndSwitchColorNode(txt, G, v, 'm', 'g', info, city)
+	
+# Notka początkowa.
+def beginNote(txt, city):
+	writeInformation(txt, 'Rozpoczynamy naszą podróż w mieście', '', city)
+
+# Wykonuje instrukcje związane z miastem, które zostało już odwiedzone.
+def executeInstructionsRelatedToVisitedCity(txt, G, v, pre, u, city, pos):
+	changeColorEdge(G, v, u, 'b', pos)
+	writeInformation(txt, 'Miasto', 'zostało już wcześniej odwiedzone', city)
+	wait(2)
+	if (pre == u):
+		changeColorEdge(G, v, u, 'g', pos)
+	else:
+		changeColorEdge(G, v, u, 'k', pos)
+
+# Pokazuje powrót do miasta.
+def showReturnToCity(txt, G, v, city):
+	markNodeAndPrintBackInformation(txt, G, v, 
+	'Powróciliśmy do miasta', city)
+	
+# Pokazuje sprawdzenie wszystkich sąsiadów.
+def showVerifyNeighbours(txt, G, v, city):
+	markNodeAndPrintBackInformation(txt, G, v, 
+	'Sprawdziliśmy już wszystkich sąsiadów miasta', city)
+	

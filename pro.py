@@ -12,37 +12,23 @@ def dfs(txt, G, cities, v, pos):
 		visited[v] = True
 		
 		if (pre != v):
-			changeColorAndPrintInformation(txt, G, v, pre, 'r', 'Wyruszamy do miasta', cities.get(v), pos)
-			wait(2)
-			changeColorAndPrintInformation(txt, G, v, pre, 'g', 'Dotarliśmy do miasta', cities.get(v), pos)
+			markTrailBetweenCitiesAndPrintReport(txt, G, v, pre, cities.get(v), pos)
 		else:
-			changeColorNode(G, v, 'r')
-			wait(1)
-			changeColorNode(G, v, 'g')
-			wait(2)
-		
+			markStartingPoint(G, v)
+			
 		for u in G.neighbors(v):
 			if visited[u] == False:
 				dfsNode(G, u, v, visited)
-				printBackInformationAndSwitchColorNode(txt, G, v, 'm', 'g',
-				 'Powróciliśmy do miasta', cities.get(v))
+				showReturnToCity(txt, G, v, cities.get(v))
 			else:
-				changeColorEdge(G, v, u, 'b', pos)
-				writeInformation(txt, 'Miasto', 'zostało już wcześniej odwiedzone', cities.get(u))
-				wait(2)
-				if (pre == u):
-					changeColorEdge(G, v, u, 'g', pos)
-				else:
-					changeColorEdge(G, v, u, 'k', pos)
-					
-		printBackInformationAndSwitchColorNode(txt, G, v, 'm', 'g',
-		 'Sprawdziliśmy już wszystkich sąsiadów miasta', cities.get(v))
+				executeInstructionsRelatedToVisitedCity(txt, G, v, pre, u, cities.get(u), pos)
+			
+		showVerifyNeighbours(txt, G, v, cities.get(v))
 	
 	visited = [False] * (len(cities))
-	writeInformation(txt, 'Rozpoczynamy naszą podróż w mieście', '', cities.get(v))
+	beginNote(txt, cities.get(v))
 	dfsNode(G, v, v, visited)
 	endNote(txt)
-	
 	
 plt.ion()
 
