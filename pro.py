@@ -2,7 +2,7 @@ from helper import *
 	
 # Wykonuje algorytm dfs na grafie G, wierzchołku startowym v i słowniku
 # cities, w którym znajdują się nazwy miast.	
-def dfs(txt, G, cities, v, pos):
+def dfs(G, cities, v):
 	
 	# Funkcja pomocnicza funkcji dfs, wykorzystuje rekurencję.
 	# Posiada parametry graf G, aktualny wierzchołek v, poprzedni
@@ -12,26 +12,24 @@ def dfs(txt, G, cities, v, pos):
 		visited[v] = True
 		
 		if (pre != v):
-			markTrailBetweenCitiesAndPrintReport(txt, G, v, pre, cities.get(v), pos)
+			markTrailBetweenCitiesAndPrintReport(G.txt, G, v, pre, cities.get(v), G.pos)
 		else:
 			markStartingPoint(G, v)
 			
 		for u in G.neighbors(v):
 			if visited[u] == False:
 				dfsNode(G, u, v, visited)
-				showReturnToCity(txt, G, v, cities.get(v))
+				showReturnToCity(G.txt, G, v, cities.get(v))
 			else:
-				executeInstructionsRelatedToVisitedCity(txt, G, v, pre, u, cities.get(u), pos)
+				executeInstructionsRelatedToVisitedCity(G.txt, G, v, pre, u, cities.get(u), G.pos)
 			
-		showVerifyNeighbours(txt, G, v, cities.get(v))
+		showVerifyNeighbours(G.txt, G, v, cities.get(v))
 	
 	visited = [False] * (len(cities))
-	beginNote(txt, cities.get(v))
+	beginNote(G.txt, cities.get(v))
 	dfsNode(G, v, v, visited)
-	endNote(txt)
+	endNote(G.txt)
 	
-plt.ion()
-
 H=nx.DiGraph()
 
 H.add_edges_from([(0,1), (1,0), (0,2), (2,0), (1,2), (2,1), (2,3), (3,2),
@@ -43,25 +41,7 @@ cities = {0:"Lisboa", 1:"Cadiz", 2:"Madrid", 3:"Barcelona", 4:"Pamplona",
 5:"Marseille", 6:"Paris", 7:"Brest", 8:"Zurich", 9:"Dieppe",
 10:"Bruxelles", 11:"Amsterdam"}
 
-fig = plt.figure(1,figsize=(16,8))
-ax = fig.add_axes((0,0,1,1))
+initGraph(H, cities)
 
-pos = nx.drawing.layout.planar_layout(H)
-
-txt=fig.text(.55,.9,'Ahoj przygodo!',fontsize=15)
-
-for n in H:
-    H.node[n]['draw'] = nx.draw_networkx_nodes(H,pos,nodelist=[n], node_size=200,alpha=0.5,node_color='k')
-for u,v in H.edges():
-    H[u][v]['draw']=nx.draw_networkx_edges(H,pos,edgelist=[(u,v)],alpha=1,arrows=False,width=3, edge_color = 'k')
-    
-posL={}
-for n,p in pos.items():
-	posL[n] = (p[0],p[1]+0.03)
-	
-labdraw = nx.draw_networkx_labels(H,posL,cities)
-wait(2)
-plt.show()
-wait(1)
-dfs(txt, H, cities, 0, pos)
+dfs(H, cities, 0)
 	

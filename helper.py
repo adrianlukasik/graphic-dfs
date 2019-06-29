@@ -85,3 +85,27 @@ def showVerifyNeighbours(txt, G, v, city):
 	markNodeAndPrintBackInformation(txt, G, v, 
 	'Sprawdziliśmy już wszystkich sąsiadów miasta', city)
 	
+# Inicjuje graf H.
+def initGraph(H, cities):
+	plt.ion()
+	fig = plt.figure(1,figsize=(16,8))
+	ax = fig.add_axes((0,0,1,1))
+
+	H.pos = nx.drawing.layout.planar_layout(H)
+
+	H.txt=fig.text(.55,.9,'Ahoj przygodo!',fontsize=15)
+
+	for n in H:
+		H.node[n]['draw'] = nx.draw_networkx_nodes(H,H.pos,nodelist=[n], node_size=200,alpha=0.5,node_color='k')
+	for u,v in H.edges():
+		H[u][v]['draw']=nx.draw_networkx_edges(H,H.pos,edgelist=[(u,v)],alpha=1,arrows=False,width=3, edge_color = 'k')
+    
+	H.posL={}
+	for n,p in H.pos.items():
+		H.posL[n] = (p[0],p[1]+0.03)
+	
+	labdraw = nx.draw_networkx_labels(H,H.posL,cities)
+	wait(2)
+	plt.show()
+	wait(1)
+	
